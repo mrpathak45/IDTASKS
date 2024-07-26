@@ -1,0 +1,115 @@
+import java.util.HashMap;
+import java.util.Map;
+public class BankAccount {
+    private String accountNumber;
+    private String accountHolder;
+    private double balance;
+
+    public BankAccount(String accountNumber, String accountHolder, double initialBalance) {
+        this.accountNumber = accountNumber;
+        this.accountHolder = accountHolder;
+        this.balance = initialBalance;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public String getAccountHolder() {
+        return accountHolder;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+            System.out.println("Deposited: " + amount);
+        } else {
+            System.out.println("Invalid deposit amount");
+        }
+    }
+
+    public void withdraw(double amount) {
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;
+            System.out.println("Withdrew: " + amount);
+        } else {
+            System.out.println("Invalid withdraw amount or insufficient balance");
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Account Number: " + accountNumber + ", Account Holder: " + accountHolder + ", Balance: " + balance;
+    }
+}
+
+
+public class Bank {
+    private Map<String, BankAccount> accounts;
+
+    public Bank() {
+        accounts = new HashMap<>();
+    }
+
+    public void addAccount(BankAccount account) {
+        accounts.put(account.getAccountNumber(), account);
+    }
+
+    public void deposit(String accountNumber, double amount) {
+        BankAccount account = accounts.get(accountNumber);
+        if (account != null) {
+            account.deposit(amount);
+        } else {
+            System.out.println("Account not found");
+        }
+    }
+
+    public void withdraw(String accountNumber, double amount) {
+        BankAccount account = accounts.get(accountNumber);
+        if (account != null) {
+            account.withdraw(amount);
+        } else {
+            System.out.println("Account not found");
+        }
+    }
+
+    public void checkBalance(String accountNumber) {
+        BankAccount account = accounts.get(accountNumber);
+        if (account != null) {
+            System.out.println("Balance: " + account.getBalance());
+        } else {
+            System.out.println("Account not found");
+        }
+    }
+
+    public void listAccounts() {
+        for (BankAccount account : accounts.values()) {
+            System.out.println(account);
+        }
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Bank bank = new Bank();
+
+        // Adding accounts
+        bank.addAccount(new BankAccount("123456789", "Alice", 1000.0));
+        bank.addAccount(new BankAccount("987654321", "Bob", 1500.0));
+
+        // Depositing money
+        bank.deposit("123456789", 500.0);
+
+        // Withdrawing money
+        bank.withdraw("123456789", 200.0);
+
+        // Checking balance
+        bank.checkBalance("123456789");
+
+        // Listing all accounts
+        bank.listAccounts();
+    }
+}
